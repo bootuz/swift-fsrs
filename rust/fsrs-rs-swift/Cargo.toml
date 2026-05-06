@@ -1,0 +1,26 @@
+[package]
+name = "fsrs-rs-swift"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Swift bindings (via uniffi-rs) for the fsrs Rust crate."
+license = "BSD-3-Clause"
+
+[lib]
+name = "fsrs_rs_swift"
+crate-type = ["staticlib"]
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "src/bin/uniffi_bindgen.rs"
+
+[dependencies]
+fsrs = "=5.2.0"
+thiserror = "1"
+uniffi = { version = "=0.28.3", features = ["cli"] }
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3
+strip = true
