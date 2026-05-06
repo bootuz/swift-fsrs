@@ -1,0 +1,49 @@
+name: Build FSRSRustCore xcframework
+
+on:
+  push:
+    tags:
+      - 'optimizer-v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-sim,x86_64-apple-ios
+
+      - name: Cache cargo registry & target
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            rust/fsrs-rs-swift/target
+          key: cargo-${{ runner.os }}-${{ hashFiles('rust/fsrs-rs-swift/Cargo.toml') }}
+
+      - name: Build xcframework
+        run: ./scripts/build-xcframework.sh
+
+      - name: Upload xcframework artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FSRSRustCore-xcframework
+          path: |
+            build/FSRSRustCore.xcframework.zip
+            build/checksum.txt
+
+      - name: Attach to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/optimizer-v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/FSRSRustCore.xcframework.zip
+            build/checksum.txt
+          generate_release_notes: true
