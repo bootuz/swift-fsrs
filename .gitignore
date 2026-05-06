@@ -4,3 +4,8 @@ FSRS.xcodeproj/xcuserdata/
 .swiftpm
 .build
 
+# FSRSOptimizer Rust + xcframework build artifacts
+rust/fsrs-rs-swift/target/
+rust/fsrs-rs-swift/Cargo.lock
+build/
+Sources/FSRSOptimizer/Generated/
