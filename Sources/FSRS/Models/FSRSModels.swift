@@ -275,4 +275,9 @@ public struct FSRSReview: Codable, Sendable {
 public struct FSRSState: Codable, Sendable {
     public var stability: Double
     public var difficulty: Double
+
+    public init(stability: Double, difficulty: Double) {
+        self.stability = stability
+        self.difficulty = difficulty
+    }
 }
